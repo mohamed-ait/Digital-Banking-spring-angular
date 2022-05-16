@@ -1,6 +1,9 @@
 package com.example.ebanckingbackend.services;
 
 import com.example.ebanckingbackend.dtos.*;
+import com.example.ebanckingbackend.exceptions.BalanceNotSufficientException;
+import com.example.ebanckingbackend.exceptions.BankAccountNotFoundException;
+import com.example.ebanckingbackend.exceptions.CustomerNotFoundException;
 
 import java.util.List;
 
@@ -24,8 +27,8 @@ public interface BankAccountService {
 
     List<AccountOperationDTO> accountHistory(String accountId);
 
-    AccountHistoryDTO getAccountHistory(String accountId, int page, int size) throws BankAccountNotFoundException;
+    //AccountHistoryDTO getAccountHistory(String accountId, int page, int size) throws BankAccountNotFoundException;
 
     List<CustomerDTO> searchCustomers(String keyword);
 }
-}
+
