@@ -45,7 +45,7 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
                 "/swagger-ui**",
                 "/swagger-ui/**",
                 "/v3/**",
-                Jwt_config.REFRESH_PATH).permitAll();
+                JwtConfig.REFRESH_PATH).permitAll();
         // http.authorizeHttpRequests().anyRequest().authenticated();
         http.addFilter( new JwtAuthenticationFilter( authenticationManagerBean() ) );
         http.addFilterBefore( new JwtAuthorizationFilter(), UsernamePasswordAuthenticationFilter.class);
