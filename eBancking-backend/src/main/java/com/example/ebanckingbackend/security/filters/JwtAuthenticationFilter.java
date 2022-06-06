@@ -51,12 +51,12 @@ public class JwtAuthenticationFilter extends UsernamePasswordAuthenticationFilte
 
     @Override
     protected void successfulAuthentication(HttpServletRequest request, HttpServletResponse response, FilterChain chain, Authentication authResult) throws IOException, ServletException {
+       //recuperer l'utilisateur authentifié
         User user = (User) authResult.getPrincipal();
         log.info(" logging Successful, user : "+user.getUsername());
-
+        //specifier l'algorithme de hachage :
         Algorithm algorithm=Algorithm.HMAC256(JwtConfig.SECRET_PHRASE);
-
-        // access token
+        // c du token :
         String jwtAccessToken= JWT.create()
                 .withSubject(user.getUsername())
                 .withExpiresAt(new Date(System.currentTimeMillis()+JwtConfig.ACCESS_TOKEN_EXPIRATION)) // 2mins
@@ -64,7 +64,7 @@ public class JwtAuthenticationFilter extends UsernamePasswordAuthenticationFilte
                 .withClaim("roles", user.getAuthorities().stream().map(r->r.getAuthority()).collect(Collectors.toList()))
                 .sign( algorithm);
 
-        // refresh token
+        // La génération du refresh token :
         String jwtRefreshToken= JWT.create()
                 .withSubject(user.getUsername())
                 .withExpiresAt(new Date(System.currentTimeMillis()+JwtConfig.REFRESH_TOKEN_EXPIRATION)) // 10mins
@@ -72,7 +72,6 @@ public class JwtAuthenticationFilter extends UsernamePasswordAuthenticationFilte
                 .withClaim("roles", user.getAuthorities().stream().map(r->r.getAuthority()).collect(Collectors.toList()))
                 .sign( algorithm);
         //response.setHeader("Authorization", jwtAccessToken); // send token in headers
-
         Map<String, String> tokens = new HashMap<>();
         tokens.put("access_token", jwtAccessToken);
         tokens.put("refresh_token", jwtRefreshToken);

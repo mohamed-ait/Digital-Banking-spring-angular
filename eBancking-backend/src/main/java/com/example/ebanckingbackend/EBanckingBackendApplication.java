@@ -9,11 +9,17 @@ import com.example.ebanckingbackend.enums.OperationType;
 import com.example.ebanckingbackend.repositories.AccountOperationRepository;
 import com.example.ebanckingbackend.repositories.BankAccountRepository;
 import com.example.ebanckingbackend.repositories.CustomerRepository;
+import com.example.ebanckingbackend.security.entities.AppRole;
+import com.example.ebanckingbackend.security.entities.AppUser;
+import com.example.ebanckingbackend.security.service.SecurityService;
 import org.springframework.boot.CommandLineRunner;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.context.annotation.Bean;
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
+import org.springframework.security.crypto.password.PasswordEncoder;
 
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.UUID;
 import java.util.stream.Stream;
@@ -24,7 +30,7 @@ public class EBanckingBackendApplication {
     public static void main(String[] args) {
         SpringApplication.run(EBanckingBackendApplication.class, args);
     }
-    @Bean
+    //@Bean
     CommandLineRunner start(CustomerRepository customerRepository, BankAccountRepository bankAccountRepository,
     AccountOperationRepository accountOperationRepository){
         return args->{
@@ -67,5 +73,25 @@ public class EBanckingBackendApplication {
                 });
             });
         };
+    }
+    //create users and roles :
+    @Bean
+    CommandLineRunner cretae_users(SecurityService securityService) {
+        return args -> {
+            securityService.addNewRole(new AppRole(null, "USER"));
+            securityService.addNewRole(new AppRole(null, "ADMIN"));
+            securityService.addNewUser(new AppUser(null, "med", "med123", new ArrayList<>()));
+            securityService.addNewUser(new AppUser(null, "medo", "med123", new ArrayList<>()));
+
+            securityService.addRoleToUser("med", "USER");
+            securityService.addRoleToUser("medo", "USER");
+            securityService.addRoleToUser("med", "ADMIN");
+
+        };
+    }
+
+    @Bean
+    PasswordEncoder passwordEncoder(){
+        return new BCryptPasswordEncoder();
     }
 }

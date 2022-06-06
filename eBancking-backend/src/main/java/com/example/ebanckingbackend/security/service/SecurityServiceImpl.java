@@ -2,10 +2,12 @@ package com.example.ebanckingbackend.security.service;
 
 import com.example.ebanckingbackend.security.entities.AppRole;
 import com.example.ebanckingbackend.security.entities.AppUser;
-import com.example.ebanckingbackend.security.entities.repositories.AppRoleRepository;
-import com.example.ebanckingbackend.security.entities.repositories.AppUserRepository;
+import com.example.ebanckingbackend.security.repositories.AppRoleRepository;
+import com.example.ebanckingbackend.security.repositories.AppUserRepository;
 import lombok.AllArgsConstructor;
+import lombok.NoArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
@@ -16,11 +18,13 @@ import java.util.UUID;
 @Service
 @Transactional
 @Slf4j
-@AllArgsConstructor
+@NoArgsConstructor
 public class SecurityServiceImpl implements SecurityService {
-
+    @Autowired
     private AppUserRepository userRepository;
+    @Autowired
     private AppRoleRepository roleRepository;
+    @Autowired
     private PasswordEncoder passwordEncoder;
 
 
